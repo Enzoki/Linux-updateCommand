@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# 1. Update the software repository list 更新軟體源列表
+echo "--- Updating software repositories, 正在更新軟體源 (apt update) ---"
+sudo apt update
+
+# 2. Upgrade existing software packages 升級現有軟體包
+echo "--- Upgrading software packages, 正在升級軟體包 (apt upgrade) ---"
+sudo apt upgrade -y
+
+# 3. Handle dependency updates 處理依賴關係更新 (發行版升級)
+echo "--- Handle dependency updates, 正在進行依賴關係升級 (dist-upgrade) ---"
+sudo apt-get dist-upgrade -y
+
+# 4. Clean up expired staging files 清理過期的暫存安裝檔
+echo "--- Clean up expired staging files, 正在清理暫存檔 (apt clean) ---"
+sudo apt-get clean
+
+# 5. Remove orphaned software packages that are no longer needed 移除不再需要的孤立軟體包
+echo "--- Remove orphaned software packages that are no longer needed, 正在移除自動安裝但不再需要的軟體 (autoremove) ---"
+sudo apt-get autoremove -y
+
+# Check if the docker command exists 檢查 docker 指令是否存在
+if command -v docker &> /dev/null; then
+    echo "--- Cleaning up unused Docker resources, 正在清理 Docker 無用資源 ---"
+    sudo docker system prune -f
+else
+    echo "--- Skipping Docker cleanup, 跳過 Docker 清理 (未偵測到 Docker) ---"
+fi
+
+echo "---------------------------------------"
+echo "System update and cleanup complete! 系統更新與清理完成！"
